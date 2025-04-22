@@ -32,10 +32,11 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        {{-- Example Link - Adjust route name as needed --}}
                         <a class="nav-link {{ request()->routeIs('posts.index') ? 'active' : '' }}" aria-current="page" href="{{ route('posts.index') }}">Posts</a>
                     </li>
-                    {{-- Add other nav links here --}}
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('posts.create') ? 'active' : '' }}" aria-current="page" href="{{ route('posts.create') }}">Create</a>
+                    </li>
                 </ul>
             </div>
         </div>
