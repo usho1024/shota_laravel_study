@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Routing\Controller;
 use Illuminate\View\View;
-use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
 
 class PostController extends Controller
 {
@@ -31,10 +31,10 @@ class PostController extends Controller
     }
 
     /**
-     * @param  \Illuminate\Http\Request  $request
+     * @param  PostRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
         // shim : インスタンス化の文法が間違っています
         // $post = new Post(); のように（）が必要です
