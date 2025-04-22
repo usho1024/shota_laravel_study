@@ -26,6 +26,20 @@ class PostController extends Controller
         ]);
     }
 
+    /**
+     * 投稿の編集画面を表示する
+     *
+     * @return View
+     */
+    public function edit($id): View
+    {
+        $post = Post::find($id);
+
+        return view('posts.edit', [
+            'post' => $post
+        ]);
+    }
+
     public function create()
     {
         return view('posts.create'); // 新規投稿フォームのビューを返す
@@ -55,6 +69,20 @@ class PostController extends Controller
 
         // まずは、returnをしてないです。このstore()アクションはRedirectResponseを返さないといけないとPHPDocに書いてあります。
         // リダイレクトのやり方はドキュメントを読んでまた調べてみてください
+        return redirect()->route('posts.index');
+    }
+
+    /**
+     * 更新処理
+     * 
+     * @param  PostRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(PostRequest $request, $id)
+    {
+        $post = Post::find($id);
+        $updatePost = $this->post->updatePost($request, $post);
+
         return redirect()->route('posts.index');
     }
 }

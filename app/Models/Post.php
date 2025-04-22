@@ -13,4 +13,17 @@ class Post extends Model
         'title',
         'content',
     ];
+
+    /**
+     * 更新処理
+     */
+    public function updatePost($request, $book)
+    {
+        $result = $post->fill([
+            'title' => $request->title,
+            'content' => $request->content,
+        ])->save();
+
+        return $result;
+    }
 }

@@ -18,6 +18,7 @@
                         </div>
                         <div class="card-footer text-end">
                             <small class="text-muted">投稿日: {{ $post->created_at->format('Y-m-d H:i') }}</small>
+                            <a href="{{ route('posts.edit', ['id'=>$post->id]) }}" class="btn btn-primary">編集</a>
                         </div>
                     </div>
                 </div>
