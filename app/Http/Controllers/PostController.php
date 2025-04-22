@@ -31,10 +31,8 @@ class PostController extends Controller
      *
      * @return View
      */
-    public function edit($id): View
+    public function edit(Post $post): View
     {
-        $post = Post::find($id);
-
         return view('posts.edit', [
             'post' => $post
         ]);
@@ -78,10 +76,12 @@ class PostController extends Controller
      * @param  PostRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(PostRequest $request, $id)
+    public function update(PostRequest $request, Post $post): RedirectResponse
     {
-        $post = Post::find($id);
-        $updatePost = $this->post->updatePost($request, $post);
+        $post->fill([
+            'title' => $request->title,
+            'content' => $request->content,
+        ])->save();
 
         return redirect()->route('posts.index');
     }

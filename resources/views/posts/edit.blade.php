@@ -6,7 +6,7 @@
     <div class="container mt-4">
         <h1 class="mb-4">投稿ID: {{ $post->id }}を編集</h1>
 
-        <form action="{{ route('posts.store') }}" method="POST">
+        <form action="{{ route('posts.update', $post->id) }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="title" class="form-label">タイトル</label>
