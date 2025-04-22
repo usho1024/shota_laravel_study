@@ -6,6 +6,7 @@ use App\Models\Post;
 use Illuminate\Routing\Controller;
 use Illuminate\View\View;
 use App\Http\Requests\PostRequest;
+use Illuminate\Http\RedirectResponse;
 
 class PostController extends Controller
 {
@@ -31,10 +32,12 @@ class PostController extends Controller
     }
 
     /**
+     * 新規投稿を作成する
+     * 
      * @param  PostRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(PostRequest $request)
+    public function store(PostRequest $request): RedirectResponse
     {
         // shim : インスタンス化の文法が間違っています
         // $post = new Post(); のように（）が必要です
