@@ -10,13 +10,19 @@
             @csrf
             <div class="mb-3">
                 <label for="title" class="form-label">タイトル</label>
-                <input type="text" id="title" name="title" class="form-control">
+                <input type="text" id="title" name="title" class="form-control" value="{{ old('title') }}">
             </div>
+            @error('title')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
 
             <div class="mb-3">
                 <label for="content" class="form-label">本文</label>
-                <textarea id="content" name="content" class="form-control" rows="10"></textarea>
+                <textarea id="content" name="content" class="form-control" rows="10">{{ old('content') }}</textarea>
             </div>
+            @error('content')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
 
             <div class="mb-3 d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary">作成</button>
