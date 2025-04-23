@@ -1,27 +1,8 @@
-## 初期設定
+# shota_laravel_study
 
-```bash or zsh
-$ cp .env.example .env
+## 概要
+Laravelの基本をハンズオンで学ぶための掲示板アプリです
 
-$ composer install
-$ docker compose build
-$ docker compose up -d
-$ php artisan migrate
-```
-
-## アーキテクチャ
-
-### Presentation Layer
-
-### Application Layer
-   
-### Domain Layer
-
-### Infrastructure Layer
-    
-## Eloquent Modelについて
-
-
-
-
-
+## 目的
+Laravelで基本的なCRUD操作+αができるようになる。
+具体的には公式リファレンスの「はじめに〜テスト」の内容を自分で説明できるレベルまで到達する。

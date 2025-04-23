@@ -78,10 +78,10 @@ class PostController extends Controller
      */
     public function update(PostRequest $request, Post $post): RedirectResponse
     {
-        $post->fill([
+        $post->update([
             'title' => $request->title,
-            'content' => $request->content,
-        ])->save();
+            'content' => $request->content
+        ]);
 
         return redirect()->route('posts.index');
     }
