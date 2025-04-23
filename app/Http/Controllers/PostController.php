@@ -78,9 +78,11 @@ class PostController extends Controller
      */
     public function update(PostRequest $request, Post $post): RedirectResponse
     {
+        $validated_params = $request->validated();
+
         $post->update([
-            'title' => $request->title,
-            'content' => $request->content
+            'title' => $validated_params['title'],
+            'content' => $validated_params['content']
         ]);
 
         return redirect()->route('posts.index');
