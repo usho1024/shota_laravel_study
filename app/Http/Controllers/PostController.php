@@ -87,4 +87,16 @@ class PostController extends Controller
 
         return redirect()->route('posts.index');
     }
+
+    /**
+     * 削除処理
+     * 
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Post $post): RedirectResponse
+    {
+        $post->delete();
+
+        return redirect()->route('posts.index');
+    }
 }
