@@ -10,18 +10,22 @@
             @foreach ($posts as $post)
                 <div class="col-md-4 col-sm-6 col-12 mb-4">
                     <div class="card h-100">
-
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $post->title }}</h5>
-
-                            <p class="card-text">{{ \Illuminate\Support\Str::limit($post->content, 100) }}</p>
+                        <h5 class="card-title">{{ $post->title }}</h5>
+                        <p class="card-text">{{ \Illuminate\Support\Str::limit($post->content, 100) }}</p>
                         </div>
-                        <div class="card-footer text-end">
+                            <div class="card-footer text-end">
                             <small class="text-muted">投稿日: {{ $post->created_at->format('Y-m-d H:i') }}</small>
                             <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-primary">編集</a>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">削除</button>
                         </div>
                     </div>
                 </div>
+
+                @component('components.modal.delete', [
+                    'table_name' => 'posts',
+                    'model' => $post,
+                ])
+                @endcomponent
             @endforeach
         </div>
     </div>
