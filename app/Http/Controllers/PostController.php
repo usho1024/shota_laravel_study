@@ -39,6 +39,18 @@ class PostController extends Controller
         ]);
     }
 
+    /**
+     * 投稿の詳細画面を表示する
+     *
+     * @return View
+     */
+    public function show(Post $post): View
+    {
+        return view('posts.show', [
+            'post' => $post
+        ]);
+    }
+
     public function create()
     {
         return view('posts.create'); // 新規投稿フォームのビューを返す
