@@ -1,7 +1,13 @@
 <?php
 
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\AuthController;
+use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/login', [AuthController::class, 'index'])->middleware(RedirectIfAuthenticated::class)->name('index');
+Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
