@@ -29,7 +29,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('posts.index') ? 'active' : '' }}" aria-current="page" href="{{ route('posts.index') }}">Posts</a>
@@ -38,6 +38,13 @@
                         <a class="nav-link {{ request()->routeIs('posts.create') ? 'active' : '' }}" aria-current="page" href="{{ route('posts.create') }}">Create</a>
                     </li>
                 </ul>
+                <div class="navbar-nav me-3">
+                    @auth
+                        <a href="{{ route('logout') }}" class="nav-link active">Logout</a>
+                    @else
+                        <a class="nav-link active" aria-current="page" href="{{ route('index') }}">Login</a>
+                    @endif
+                </div>
             </div>
         </div>
     </nav>
