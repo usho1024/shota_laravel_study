@@ -18,7 +18,8 @@ class PostController extends Controller
     public function index(): View
     {
         $posts = Post::query()
-            ->orderByDesc('created_at')
+            ->withTrashed()
+            ->orderByDesc('id')
             ->paginate(20);
 
         return view('posts.index', [
@@ -96,6 +97,18 @@ class PostController extends Controller
     public function destroy(Post $post): RedirectResponse
     {
         $post->delete();
+
+        return redirect()->route('posts.index');
+    }
+
+    /**
+     * 投稿を復元する
+     * 
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function restore(Post $post): RedirectResponse
+    {
+        $post->restore();
 
         return redirect()->route('posts.index');
     }
