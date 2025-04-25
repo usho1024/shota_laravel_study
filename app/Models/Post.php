@@ -5,7 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Gate;
 
 class Post extends Model
 {
@@ -25,5 +27,25 @@ class Post extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * 自分が管理できる削除されたPostなのか
+     *
+     * @return bool
+     */
+    public function isManageableTrashedPost(): bool
+    {
+        return Gate::allows('manage-post', $this) && $this->trashed();
+    }
+
+    /**
+     * 自分が管理でない削除されたPostなのか
+     *
+     * @return bool
+     */
+    public function isUnmanageableTrashedPost(): bool
+    {
+        return Gate::denies('manage-post', $this) && $this->trashed();
     }
 }
