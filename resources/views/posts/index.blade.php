@@ -16,12 +16,17 @@
                         </div>
                         <div class="card-footer text-end">
                             <small class="text-muted">投稿日: {{ $post->created_at->format('Y-m-d H:i') }}</small>
-                            @if ($post->deleted_at)
-                                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#restoreModal{{ $post->id }}">削除取消</button>
-                            @else
-                                <a href="{{ route('posts.show', $post->id) }}" class="btn btn-success">詳細</a>
-                                <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-primary">編集</a>
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $post->id }}">削除</button>
+                            
+                            <a href="{{ route('posts.show', $post->id) }}" class="btn btn-success">詳細</a>
+                            @if (Auth::check())                                
+                                @can('manage-post', $post)
+                                    <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-primary">編集</a>
+                                    @if ($post->deleted_at)
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#restoreModal{{ $post->id }}">削除取消</button>
+                                    @else
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $post->id }}">削除</button>
+                                    @endif
+                                @endcan
                             @endif
                         </div>
                     </div>

@@ -14,8 +14,8 @@ class DatabaseSeeder extends Seeder
     {
         // 他のシーダーを呼び出すことも可能
         $this->call([
-            PostSeeder::class, // ← 作成したPostSeederをここに追加
             UserSeeder::class,
+            PostSeeder::class, // ← 作成したPostSeederをここに追加
             // CommentSeeder::class,
         ]);
     }
