@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\View\View;
 use App\Http\Requests\PostRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -71,6 +72,7 @@ class PostController extends Controller
         // $requestからinput情報を取得するときはinput()を使いましょう
         // $request->input('title');
         // なくても動作はされますが、これが$requestのプロパティなのか？ユーザinputなのか判断できないので！
+        $post->user_id = Auth::id();
         $post->title = $request->input('title');
         $post->content = $request->input('content');
 

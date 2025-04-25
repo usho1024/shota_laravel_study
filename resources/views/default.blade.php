@@ -34,9 +34,11 @@
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('posts.index') ? 'active' : '' }}" aria-current="page" href="{{ route('posts.index') }}">Posts</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('posts.create') ? 'active' : '' }}" aria-current="page" href="{{ route('posts.create') }}">Create</a>
-                    </li>
+                    @auth
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('posts.create') ? 'active' : '' }}" aria-current="page" href="{{ route('posts.create') }}">Create</a>
+                        </li>
+                    @endauth
                 </ul>
                 <div class="navbar-nav me-3">
                     @auth
@@ -51,9 +53,9 @@
 
     {{-- Main Content Area --}}
     <main class="py-4">
-         <div class="container mt-4">
+        <div class="container mt-4">
             @yield('content') {{-- Child view content goes here --}}
-         </div>
+        </div>
     </main>
 
     {{-- Footer (Example) --}}
