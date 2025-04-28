@@ -5,6 +5,23 @@
 @section('content')
     <h1>投稿一覧</h1>
 
+    
+    <form action="{{ route('posts.index') }}" method="GET">
+        @csrf
+        <div class="input-group mb-3">
+            <select name="condition" class="form-select">
+                @foreach ($conditions as $condition)
+                    <option value="{{ $condition->value }}" @selected(($search_params['condition'] ?? '') === $condition->value)>
+                        {{ $condition->label() }}
+                    </option>
+                @endforeach
+            </select>
+    
+            <input type="text" name="keyword" value="{{ $search_params['keyword'] ?? '' }}" class="form-control">
+            <button type="submit" class="btn btn-primary">検索</button>
+        </div>
+    </form>
+
     <div class="container mt-4">
         <div class="row">
             @foreach ($posts as $post)

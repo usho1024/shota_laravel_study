@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Builders\PostSearchBuilder;
+use App\Enums\SearchCondition;
 use App\Models\Post;
 use Illuminate\Routing\Controller;
 use Illuminate\View\View;
 use App\Http\Requests\PostRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
@@ -16,15 +19,22 @@ class PostController extends Controller
      *
      * @return View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $posts = Post::query()
+        $search_params = $request->only(['keyword', 'condition']);
+        $query = PostSearchBuilder::build($search_params);
+        $conditions = SearchCondition::cases();
+
+        $posts = $query
             ->withTrashed()
             ->orderByDesc('id')
-            ->paginate(20);
+            ->paginate(20)
+            ->appends($search_params);
 
         return view('posts.index', [
-            'posts' => $posts
+            'posts' => $posts,
+            'conditions' => $conditions,
+            'search_params' => $search_params
         ]);
     }
 
