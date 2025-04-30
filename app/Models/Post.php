@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Gate;
 
@@ -14,6 +15,7 @@ class Post extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'user_id',
         'title',
         'content',
     ];
@@ -23,9 +25,15 @@ class Post extends Model
         return $this->withTrashed()->where($field ?? 'id', $value)->firstOrFail();
     }
 
+    
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
     }
 
     /**
@@ -39,7 +47,7 @@ class Post extends Model
     }
 
     /**
-     * 自分が管理でない削除されたPostなのか
+     * 自分が管理できない削除されたPostなのか
      *
      * @return bool
      */

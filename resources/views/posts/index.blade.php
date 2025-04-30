@@ -57,6 +57,7 @@
 
                 @component('components.modal.delete', [
                     'table_name' => 'posts',
+                    'table_text' => '投稿',
                     'model' => $post,
                 ])
                 @endcomponent
