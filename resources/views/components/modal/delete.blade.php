@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                この投稿（ID: {{ $model->id }}）を本当に削除しますか？
+                この{{ $table_text }}（ID: {{ $model->id }}）を本当に削除しますか？
             </div>
             <div class="modal-footer text-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">いいえ</button>

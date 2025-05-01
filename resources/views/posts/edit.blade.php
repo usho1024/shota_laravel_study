@@ -1,6 +1,6 @@
 @extends('default')
 
-@section('title', '投稿一覧')
+@section('title', '投稿編集')
 
 @section('content')
     <div class="container mt-4">
