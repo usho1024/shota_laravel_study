@@ -23,7 +23,8 @@ class CommentFactory extends Factory
 
         return [
             'user_id' => $user->id,
-            'post_id' => $post->id,
+            'post_id' => 100,
+            'parent_id' => 1,
             'content' => $this->faker->realText(30),
         ];
     }

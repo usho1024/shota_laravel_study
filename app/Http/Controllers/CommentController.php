@@ -8,6 +8,9 @@ use App\Models\Comment;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use RuntimeException;
 
 class CommentController
 {
@@ -20,9 +23,13 @@ class CommentController
     public function store(CommentRequest $request): RedirectResponse
     {
         $validated_params = $request->validated();
-        $validated_params['user_id'] = Auth::id();
-        $validated_params['post_id'] = $request->input('post_id');
-        Comment::create($validated_params);
+
+        Comment::create([
+            'user_id' => Auth::user()->id,
+            'post_id' => $validated_params['post_id'],
+            'parent_id' => $validated_params['parent_id'] ?: null ,
+            'content' => $validated_params['content'],
+        ]);
 
         return redirect()->back();
     }
@@ -46,7 +53,18 @@ class CommentController
 
     public function destroy(Comment $comment): RedirectResponse
     {
-        $comment->delete();
+        try {
+            DB::beginTransaction();
+
+            $comment->replies()->delete();
+            $comment->delete();
+
+            DB::commit();
+        } catch (RuntimeException $e) {
+            Log::error($e->getMessage());
+
+            DB::rollBack();
+        }
 
         return redirect()->back();
     }

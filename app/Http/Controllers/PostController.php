@@ -58,8 +58,17 @@ class PostController extends Controller
      */
     public function show(Post $post): View
     {
-        $post->load('comments.user');
-
+        $post->load([
+            'comments' => function ($query) {
+                $query->whereNull('parent_id');    
+                $query->with('user');
+                $query->with(['replies' => function ($replyQuery) {
+                    $replyQuery->with('user');
+                    $replyQuery->orderBy('created_at', 'asc');
+                }]);
+            }
+        ]);
+    
         return view('posts.show', [
             'post' => $post,
         ]);
