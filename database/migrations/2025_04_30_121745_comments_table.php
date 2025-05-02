@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('post_id')->constrained()->cascadeOnDelete();
+            $table->unsignedInteger('parent_id')->nullable();
             $table->text('content');
             $table->datetimes();
             $table->softDeletes();
+            $table->index('parent_id');
         });
     }
 
