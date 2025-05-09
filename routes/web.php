@@ -1,12 +1,14 @@
 <?php
 
+use App\Http\Controllers\Admin\TopController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\AdminLoginController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/login', [AuthController::class, 'index'])->middleware(RedirectIfAuthenticated::class)->name('index');
+Route::get('/login', [AuthController::class, 'index'])->name('index');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
 Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -31,4 +33,12 @@ Route::middleware(['auth', 'can:manage-comment,comment'])->group(function () {
     Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
     Route::post('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+});
+
+Route::get('/admin-login', [AdminLoginController::class, 'create'])->name('admin.login');
+Route::post('/admin-login', [AdminLoginController::class, 'store'])->name('admin.login.store');
+Route::delete('/admin-login', [AdminLoginController::class, 'destroy'])->name('admin.login.destroy');
+
+Route::middleware('auth:admin')->group(function () {
+    Route::get('/admin', [TopController::class, 'index'])->name('admin.top');
 });

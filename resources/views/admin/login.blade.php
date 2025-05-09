@@ -1,16 +1,16 @@
 @extends('default')
 
-@section('title', 'ユーザーログイン')
+@section('title', '管理者ログイン')
 
 @section('content')
     <div class="container mt-4">
-        <h1 class="mb-4">ユーザーログイン</h1>
+        <h1 class="mb-4">管理者ログイン</h1>
 
         @error('unmatch')
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
 
-        <form action="{{ route('login') }}" method="POST">
+        <form action="{{ route('admin.login.store') }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="email" class="form-label">email</label>
@@ -28,7 +28,7 @@
         </form>
 
         <div class="text-center mt-5">
-            <a href="{{ route('admin.login.store') }}">管理者ログイン</a>
+            <a href="{{ route('index') }}">ユーザーログイン</a>
         </div>
     </div>
 @endsection
