@@ -23,7 +23,7 @@
 </head>
 <body>
     {{-- Navigation Bar (Example) --}}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top text-light">
         <div class="container-fluid">
             <a class="navbar-brand">{{ config('app.name', 'Laravel App') }}</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,12 +40,22 @@
                         </li>
                     @endauth
                 </ul>
-                <div class="navbar-nav me-3">
-                    @auth
-                        <a href="{{ route('logout') }}" class="nav-link active">Logout</a>
-                    @else
-                        <a class="nav-link active" aria-current="page" href="{{ route('index') }}">Login</a>
-                    @endif
+                <div class="navbar-nav me-3 align-items-center">
+                    @auth('web')
+                        <span class="me-3">ユーザー:  {{ Auth::user()->email }}</span>
+                        <a href="{{ route('logout') }}" class="btn btn-danger me-3">ユーザーログアウト</a>
+                    @endauth
+
+                    @auth('admin')
+                        <span class="me-3">管理者:  {{ Auth::guard('admin')->user()->email }}</span>
+                        <form method="POST" action="{{ route('admin.login.destroy') }}">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" class="btn btn-danger me-3">管理ログアウト</button>
+                        </form>
+                    @endauth
+
+                    <a class="nav-link active" aria-current="page" href="{{ route('index') }}">ログイン</a>
                 </div>
             </div>
         </div>
