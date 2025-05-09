@@ -1,15 +1,16 @@
 <?php
 
+use App\Http\Controllers\AuthController as UserAuthController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
-use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\TopController;
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 
-Route::get('/login', [AuthController::class, 'index'])->middleware(RedirectIfAuthenticated::class)->name('index');
-Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
+Route::get('/login', [UserAuthController::class, 'index'])->name('index');
+Route::post('/login', [UserAuthController::class, 'authenticate'])->name('login');
 Route::middleware(['auth'])->group(function () {
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/logout', [UserAuthController::class, 'logout'])->name('logout');
 });
 
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
@@ -31,4 +32,14 @@ Route::middleware(['auth', 'can:manage-comment,comment'])->group(function () {
     Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
     Route::post('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+});
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/login', [AdminAuthController::class, 'index'])->name('index');
+    Route::post('/login', [AdminAuthController::class, 'authenticate'])->name('login');
+    
+    Route::middleware('auth:admin')->group(function () {
+        Route::get('/', [TopController::class, 'index'])->name('top');
+        Route::get('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+    });
 });

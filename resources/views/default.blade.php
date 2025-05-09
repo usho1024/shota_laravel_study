@@ -23,7 +23,7 @@
 </head>
 <body>
     {{-- Navigation Bar (Example) --}}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top text-light">
         <div class="container-fluid">
             <a class="navbar-brand">{{ config('app.name', 'Laravel App') }}</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,20 +31,30 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('posts.index') ? 'active' : '' }}" aria-current="page" href="{{ route('posts.index') }}">Posts</a>
-                    </li>
-                    @auth
+                    @if (!request()->is('admin*'))
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('posts.create') ? 'active' : '' }}" aria-current="page" href="{{ route('posts.create') }}">Create</a>
+                            <a class="nav-link {{ request()->routeIs('posts.index') ? 'active' : '' }}" aria-current="page" href="{{ route('posts.index') }}">Posts</a>
                         </li>
-                    @endauth
+                        @auth
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('posts.create') ? 'active' : '' }}" aria-current="page" href="{{ route('posts.create') }}">Create</a>
+                            </li>
+                        @endauth
+                    @endif
                 </ul>
-                <div class="navbar-nav me-3">
-                    @auth
-                        <a href="{{ route('logout') }}" class="nav-link active">Logout</a>
-                    @else
-                        <a class="nav-link active" aria-current="page" href="{{ route('index') }}">Login</a>
+                <div class="navbar-nav me-3 align-items-center">
+                    @auth('user')
+                        <span class="me-3">ユーザー:  {{ Auth::user()->email }}</span>
+                        <a href="{{ route('logout') }}" class="btn btn-danger me-3">ユーザーログアウト</a>
+                    @endauth
+
+                    @auth('admin')
+                        <span class="me-3">管理者:  {{ Auth::guard('admin')->user()->email }}</span>
+                        <a href="{{ route('admin.logout') }}" class="btn btn-danger me-3">管理者ログアウト</a>
+                    @endauth
+                    
+                    @if (!request()->is('admin*'))
+                        <a class="nav-link active" aria-current="page" href="{{ route('index') }}">ログイン</a>
                     @endif
                 </div>
             </div>
