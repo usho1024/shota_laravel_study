@@ -29,14 +29,14 @@ class AuthController
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::guard('user')->attempt($credentials)) {
             $request->session()->regenerate();
 
             return redirect()->intended('posts');
         }
 
         return redirect()->back()->withErrors([
-            'unmatch' => 'ログインに失敗しました。入力されたログイン情報が間違っています。',
+            'auth' => 'ログインに失敗しました。入力されたログイン情報が間違っています。',
         ]);
     }
 
@@ -45,11 +45,8 @@ class AuthController
      */
     public function logout(Request $request): RedirectResponse
     {
-        Auth::logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
+        Auth::guard('user')->logout();
+        $request->session()->regenerate();
 
         return redirect()->route('login');
     }
