@@ -52,8 +52,12 @@
                         <span class="me-3">管理者:  {{ Auth::guard('admin')->user()->email }}</span>
                         <a href="{{ route('admin.logout') }}" class="btn btn-danger me-3">管理者ログアウト</a>
                     @endauth
-                    
-                    @if (!request()->is('admin*'))
+                        
+                    @if (request()->is('admin*'))
+                        <a href="{{ route('posts.index') }}" class="btn btn-light me-3">投稿一覧</a>
+                    @endif
+
+                    @if (!request()->is('admin*') && !Auth::guard('user')->check())
                         <a class="nav-link active" aria-current="page" href="{{ route('index') }}">ログイン</a>
                     @endif
                 </div>
