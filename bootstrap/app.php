@@ -12,6 +12,21 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // authミドルウェアの動作を変更する
+        $middleware->redirectGuestsTo(function (Request $request) {
+            if ($request->is('admin/*') || $request->routeIs('admin.*')) {
+                return route('admin.login');
+            }
+            return route('login');
+        });
+        
+        // guestミドルウェアの動作を変更する
+        $middleware->redirectUsersTo(function (Request $request) {
+            if ($request->is('admin/*') || $request->routeIs('admin.*')) {
+                return route('admin.top');
+            }
+            return route('posts.index');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
