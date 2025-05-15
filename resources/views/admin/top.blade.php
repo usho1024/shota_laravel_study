@@ -7,34 +7,45 @@
 
     <div class="container mt-4">
         <div class="row">
-            @foreach ($posts as $post)
-                <div class="col-md-4 col-sm-6 col-12 mb-4">
-                    <div class="card h-100">
-                        <div @class([
-                            'card-body',
-                        ])>
-                            <h5 class="card-title">{{ $post->title }}</h5>
-                            <p class="card-text">{{ \Illuminate\Support\Str::limit($post->content, 100) }}</p>
-                            <div>
-                                <small class="text-muted">投稿日: {{ $post->created_at->format('Y-m-d H:i') }}</small>
+            <div class="col-6 p-3">
+                <h3>最新順</h3>
+
+                @foreach ($new_posts as $post)
+                    <div class="col-12 mb-4">
+                        <div class="card h-100">
+                            <div @class([
+                                'card-body',
+                            ])>
+                                <h5 class="card-title">{{ $post->title }}</h5>
+                                <p class="card-text">{{ \Illuminate\Support\Str::limit($post->content, 100) }}</p>
+                                <div>
+                                    <small class="text-muted">投稿日: {{ $post->created_at->format('Y-m-d H:i') }}　コメント数: {{ $post->comments_count }}</small>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endforeach
+            </div>
 
-                @component('components.modal.delete', [
-                    'table_name' => 'posts',
-                    'table_text' => '投稿',
-                    'model' => $post,
-                ])
-                @endcomponent
+            <div class="col-6 p-3">
+                <h3>コメントが多い順</h3>
 
-                @component('components.modal.restore', [
-                    'table_name' => 'posts',
-                    'model' => $post,
-                ])
-                @endcomponent
-            @endforeach
+                @foreach ($commented_posts as $post)
+                    <div class="col-12 mb-4">
+                        <div class="card h-100">
+                            <div @class([
+                                'card-body',
+                            ])>
+                                <h5 class="card-title">{{ $post->title }}</h5>
+                                <p class="card-text">{{ \Illuminate\Support\Str::limit($post->content, 100) }}</p>
+                                <div>
+                                    <small class="text-muted">投稿日: {{ $post->created_at->format('Y-m-d H:i') }}　コメント数: {{ $post->comments_count }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
         </div>
     </div>
 @endsection
