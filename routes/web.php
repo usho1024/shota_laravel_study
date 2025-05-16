@@ -6,6 +6,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Admin\TopController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Middleware\AdminRedirectIfAuthenticated;
 use App\Http\Middleware\RedirectIfAuthenticated;
 
 Route::get('/login', [UserAuthController::class, 'index'])->middleware(RedirectIfAuthenticated::class)->name('index');
@@ -36,7 +37,7 @@ Route::middleware(['auth', 'can:manage-comment,comment'])->group(function () {
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/login', [AdminAuthController::class, 'index'])->name('index');
+    Route::get('/login', [AdminAuthController::class, 'index'])->middleware(AdminRedirectIfAuthenticated::class)->name('index');
     Route::post('/login', [AdminAuthController::class, 'authenticate'])->name('login');
     
     Route::middleware('auth:admin')->group(function () {
