@@ -1,14 +1,17 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController as UserAuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\TopController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 
-Route::get('/login', [UserAuthController::class, 'index'])->name('index');
-Route::post('/login', [UserAuthController::class, 'authenticate'])->name('login');
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', [UserAuthController::class, 'index'])->name('index');
+    Route::post('/login', [UserAuthController::class, 'authenticate'])->name('login');
+});
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [UserAuthController::class, 'logout'])->name('logout');
 });
@@ -35,9 +38,11 @@ Route::middleware(['auth', 'can:manage-comment,comment'])->group(function () {
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/login', [AdminAuthController::class, 'index'])->name('index');
-    Route::post('/login', [AdminAuthController::class, 'authenticate'])->name('login');
-    
+    Route::middleware(['guest:admin'])->group(function () {
+        Route::get('/login', [AdminAuthController::class, 'index'])->name('index');
+        Route::post('/login', [AdminAuthController::class, 'authenticate'])->name('login');
+    });
+
     Route::middleware('auth:admin')->group(function () {
         Route::get('/', [TopController::class, 'index'])->name('top');
         Route::get('/logout', [AdminAuthController::class, 'logout'])->name('logout');
