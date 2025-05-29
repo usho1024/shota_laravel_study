@@ -8,7 +8,6 @@ use App\Models\Post;
 use Illuminate\Routing\Controller;
 use Illuminate\View\View;
 use App\Http\Requests\PostRequest;
-use App\Models\Comment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +26,6 @@ class PostController extends Controller
         $conditions = SearchCondition::cases();
 
         $posts = $query
-            ->withTrashed()
             ->orderByDesc('id')
             ->paginate(20)
             ->appends($search_params);
@@ -113,25 +111,27 @@ class PostController extends Controller
     }
 
     /**
-     * 削除処理
+     * 投稿を非表示にする
      * 
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Post $post): RedirectResponse
+    public function hide(Post $post): RedirectResponse
     {
-        $post->delete();
+        $post->is_hidden = true;
+        $post->save();
 
         return redirect()->route('posts.index');
     }
 
     /**
-     * 投稿を復元する
+     * 投稿を再表示する
      * 
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function restore(Post $post): RedirectResponse
+    public function display(Post $post): RedirectResponse
     {
-        $post->restore();
+        $post->is_hidden = false;
+        $post->save();
 
         return redirect()->route('posts.index');
     }

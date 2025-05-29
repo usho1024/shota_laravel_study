@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Post;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class TopController
@@ -30,5 +31,17 @@ class TopController
             'new_posts' => $new_posts,
             'commented_posts' => $commented_posts,
         ]);
+    }
+
+    /**
+     * 投稿を論理削除する
+     * 
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroyPost(Post $post): RedirectResponse
+    {
+        $post->delete();
+
+        return redirect()->route('admin.top');
     }
 }

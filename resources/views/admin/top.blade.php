@@ -22,8 +22,21 @@
                                     <small class="text-muted">投稿日: {{ $post->created_at->format('Y-m-d H:i') }}　コメント数: {{ $post->comments_count }}</small>
                                 </div>
                             </div>
+
+                            @if (!$post->trashed())
+                                <div class="text-end m-3"><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $post->id }}">削除</button></div>
+                            @else
+                                <p class="p-3">削除済み</p>
+                            @endif
                         </div>
                     </div>
+
+                    @component('components.modal.delete', [
+                        'table_name' => 'posts',
+                        'table_text' => '投稿',
+                        'model' => $post,
+                    ])
+                    @endcomponent
                 @endforeach
             </div>
 
@@ -42,8 +55,21 @@
                                     <small class="text-muted">投稿日: {{ $post->created_at->format('Y-m-d H:i') }}　コメント数: {{ $post->comments_count }}</small>
                                 </div>
                             </div>
+
+                            @if (!$post->trashed())
+                                <div class="text-end m-3"><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $post->id }}">削除</button></div>
+                            @else
+                                <p class="p-3">削除済み</p>
+                            @endif
                         </div>
                     </div>
+
+                    @component('components.modal.delete', [
+                        'table_name' => 'posts',
+                        'table_text' => '投稿',
+                        'model' => $post,
+                    ])
+                    @endcomponent
                 @endforeach
             </div>
         </div>

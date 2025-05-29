@@ -41,9 +41,9 @@ class Post extends Model
      *
      * @return bool
      */
-    public function isManageableTrashedPost(): bool
+    public function isManageableHiddenPost(): bool
     {
-        return Gate::allows('manage-post', $this) && $this->trashed();
+        return Gate::allows('manage-post', $this) && $this->is_hidden;
     }
 
     /**
@@ -51,8 +51,8 @@ class Post extends Model
      *
      * @return bool
      */
-    public function isUnmanageableTrashedPost(): bool
+    public function isUnmanageableHiddenPost(): bool
     {
-        return Gate::denies('manage-post', $this) && $this->trashed();
+        return Gate::denies('manage-post', $this) && $this->is_hidden;
     }
 }

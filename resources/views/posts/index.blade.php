@@ -25,7 +25,7 @@
     <div class="container mt-4">
         <div class="row">
             @foreach ($posts as $post)
-                @if($post->isUnmanageableTrashedPost())
+                @if($post->isUnmanageableHiddenPost())
                     @continue
                 @endif
 
@@ -33,7 +33,7 @@
                     <div class="card h-100">
                         <div @class([
                             'card-body',
-                            'bg-secondary-subtle' => $post->isManageableTrashedPost()
+                            'bg-secondary-subtle' => $post->isManageableHiddenPost()
                         ])>
                             <h5 class="card-title">{{ $post->title }}</h5>
                             <p class="card-text">{{ \Illuminate\Support\Str::limit($post->content, 100) }}</p>
@@ -44,25 +44,25 @@
                         <div class="card-footer text-end">
                             <a href="{{ route('posts.show', $post->id) }}" class="btn btn-success">詳細</a>
                             @can('manage-post', $post)
-                                @if ($post->trashed())
-                                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#restoreModal{{ $post->id }}">削除取消</button>
+                                @if ($post->is_hidden)
+                                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#restoreModal{{ $post->id }}">再表示</button>
                                 @else
                                     <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-primary">編集</a>
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $post->id }}">削除</button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $post->id }}">非表示</button>
                                 @endif
                             @endcan
                         </div>
                     </div>
                 </div>
 
-                @component('components.modal.delete', [
+                @component('components.modal.hide', [
                     'table_name' => 'posts',
                     'table_text' => '投稿',
                     'model' => $post,
                 ])
                 @endcomponent
 
-                @component('components.modal.restore', [
+                @component('components.modal.display', [
                     'table_name' => 'posts',
                     'model' => $post,
                 ])
