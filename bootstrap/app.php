@@ -1,9 +1,12 @@
 <?php
 
+use App\Exceptions\NotFoundHttpExceptionRenderer;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -29,5 +32,17 @@ return Application::configure(basePath: dirname(__DIR__))
         });
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $renderers = [
+            NotFoundHttpException::class => NotFoundHttpExceptionRenderer::class,
+            // 他の例外の場合追加可能
+        ];
+
+        foreach ($renderers as $exception => $rendererClass) {
+            $renderer = new $rendererClass();
+            $exceptions->render(function (HttpException $e, $request) use ($exception, $renderer) {
+                if ($e instanceof $exception) {
+                    return $renderer->render($e, $request);
+                }
+            });
+        }
     })->create();
