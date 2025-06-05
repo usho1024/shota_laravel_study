@@ -22,14 +22,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 });
-Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
-
+Route::get('/posts/{post}', [PostController::class, 'show'])->middleware('can:view-post,post')->name('posts.show');
 Route::middleware(['auth', 'can:manage-post,post'])->group(function () {
     Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
     Route::post('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
-    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
-    Route::put('/posts/{post}/restore', [PostController::class, 'restore'])->name('posts.restore');
+    Route::patch('/posts/{post}/hide', [PostController::class, 'hide'])->name('posts.hide');
+    Route::patch('/posts/{post}/display', [PostController::class, 'display'])->name('posts.display');
 });
+Route::delete('/posts/{post}', [TopController::class, 'destroyPost'])->middleware('auth:admin')->name('posts.destroy');
 
 Route::middleware(['auth', 'can:manage-comment,comment'])->group(function () {
     Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');

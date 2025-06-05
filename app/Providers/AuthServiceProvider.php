@@ -22,5 +22,17 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('manage-comment', function (User $user, Comment $comment) {
             return $user->id === $comment->user_id;
         });
+
+        Gate::define('view-post', function (?User $user, Post $post) {
+            if ($post->is_hidden) {
+                if ($user && $user->id === $post->user_id) {
+                    return true;
+                }
+
+                return false;
+            }
+
+            return true;
+        });
     }
 }
