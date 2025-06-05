@@ -1,10 +1,12 @@
 <?php
 
+use App\Exceptions\AccessDeniedHttpExceptionRenderer;
 use App\Exceptions\NotFoundHttpExceptionRenderer;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -34,6 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         $renderers = [
             NotFoundHttpException::class => NotFoundHttpExceptionRenderer::class,
+            AccessDeniedHttpException::class => AccessDeniedHttpExceptionRenderer::class,
             // 他の例外の場合追加可能
         ];
 
