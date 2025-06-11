@@ -5,6 +5,7 @@ namespace App\Builders;
 use App\Enums\SearchCondition;
 use App\Models\Post;
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 
 class PostSearchBuilder
@@ -23,18 +24,14 @@ class PostSearchBuilder
             return $query;
         }
 
-        if (isset($params['start_date'], $params['end_date'])) {
-            $start_date = Carbon::parse($params['start_date'])->startOfDay();
-            $end_date = Carbon::parse($params['end_date'])->endOfDay();
-            
+        $start_date = isset($params['start_date']) ? CarbonImmutable::parse($params['start_date'])->startOfDay() : null;
+        $end_date = isset($params['end_date']) ? CarbonImmutable::parse($params['end_date'])->endOfDay() : null;
+
+        if ($start_date && $end_date) {
             $query->whereBetween('created_at', [$start_date, $end_date]);
-        } elseif(isset($params['start_date'])) {
-            $start_date = Carbon::parse($params['start_date'])->startOfDay();
-
-            $query->where('created_at', '>=', $start_date); 
-        } elseif(isset($params['end_date'])) {
-            $end_date = Carbon::parse($params['end_date'])->endOfDay();
-
+        } elseif ($start_date) {
+            $query->where('created_at', '>=', $start_date);
+        } elseif ($end_date) {
             $query->where('created_at', '<=', $end_date);
         }
 
