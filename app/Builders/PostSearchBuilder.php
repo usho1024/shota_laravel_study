@@ -4,6 +4,8 @@ namespace App\Builders;
 
 use App\Enums\SearchCondition;
 use App\Models\Post;
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 
 class PostSearchBuilder
@@ -18,29 +20,43 @@ class PostSearchBuilder
     {
         $query = Post::query();
 
-        if (!isset($params['keyword'])) {
+        if (!$params) {
             return $query;
         }
 
-        $keyword = $params['keyword'];
+        $start_date = isset($params['start_date']) ? CarbonImmutable::parse($params['start_date'])->startOfDay() : null;
+        $end_date = isset($params['end_date']) ? CarbonImmutable::parse($params['end_date'])->endOfDay() : null;
 
-        if ($params['condition'] === SearchCondition::TitleOrContent->value) {
-            $query->where(function (Builder $subQuery) use ($keyword) {
-                $subQuery->where('title', 'LIKE', "%{$keyword}%")
-                        ->orWhere('content', 'LIKE', "%{$keyword}%");
-            });
+        if ($start_date && $end_date) {
+            $query->whereBetween('created_at', [$start_date, $end_date]);
+        } elseif ($start_date) {
+            $query->where('created_at', '>=', $start_date);
+        } elseif ($end_date) {
+            $query->where('created_at', '<=', $end_date);
         }
 
-        if ($params['condition'] === SearchCondition::Title->value) {
-            $query->where(function (Builder $subQuery) use ($keyword) {
-                $subQuery->where('title', 'LIKE', "%{$keyword}%");
-            });
-        }
+        if (isset($params['keyword'])) {
+            $keyword = $params['keyword'];
+            $condition = $params['condition'];
 
-        if ($params['condition'] === SearchCondition::Content->value) {
-            $query->where(function (Builder $subQuery) use ($keyword) {
-                $subQuery->where('content', 'LIKE', "%{$keyword}%");
-            });
+            if ($condition === SearchCondition::TitleOrContent->value) {
+                $query->where(function (Builder $subQuery) use ($keyword) {
+                    $subQuery->where('title', 'LIKE', "%{$keyword}%")
+                            ->orWhere('content', 'LIKE', "%{$keyword}%");
+                });
+            }
+    
+            if ($condition === SearchCondition::Title->value) {
+                $query->where(function (Builder $subQuery) use ($keyword) {
+                    $subQuery->where('title', 'LIKE', "%{$keyword}%");
+                });
+            }
+    
+            if ($condition === SearchCondition::Content->value) {
+                $query->where(function (Builder $subQuery) use ($keyword) {
+                    $subQuery->where('content', 'LIKE', "%{$keyword}%");
+                });
+            }
         }
 
         return $query;

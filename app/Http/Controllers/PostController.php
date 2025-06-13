@@ -21,7 +21,7 @@ class PostController extends Controller
      */
     public function index(Request $request): View
     {
-        $search_params = $request->only(['keyword', 'condition']);
+        $search_params = $request->only(['start_date', 'end_date', 'condition', 'keyword']);
         $query = PostSearchBuilder::build($search_params);
         $conditions = SearchCondition::cases();
 
