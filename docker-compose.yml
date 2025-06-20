@@ -1,11 +1,12 @@
 services:
     app:
         container_name: ${APP_NAME}
-        build: ../boiler_template_laravel/docker_base/docker
+        build: ../shota_laravel_study/docker_base/docker
         volumes:
             - ./:/var/www/html
         ports:
             - 80:80
+            - '5173:5173' # Viteサーバー用
         environment:
             DB_CONNECTION: ${DB_CONNECTION}
             DB_HOST: ${DB_HOST}

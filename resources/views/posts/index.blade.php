@@ -5,10 +5,12 @@
 @section('content')
     <h1>投稿一覧</h1>
 
-    
     <form action="{{ route('posts.index') }}" method="GET">
         @csrf
         <div class="input-group mb-3">
+            <input type="text" name="start_date" value="{{ $search_params['start_date'] ?? '' }}" class="form-control" id="start-date" placeholder="開始日を選択...">
+            <input type="text" name="end_date" value="{{ $search_params['end_date'] ?? '' }}" class="form-control" id="end-date" placeholder="終了日を選択...">
+
             <select name="condition" class="form-select">
                 @foreach ($conditions as $condition)
                     <option value="{{ $condition->value }}" @selected(($search_params['condition'] ?? '') === $condition->value)>
@@ -16,7 +18,7 @@
                     </option>
                 @endforeach
             </select>
-    
+
             <input type="text" name="keyword" value="{{ $search_params['keyword'] ?? '' }}" class="form-control">
             <button type="submit" class="btn btn-primary">検索</button>
         </div>

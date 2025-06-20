@@ -3,7 +3,7 @@ FROM amazonlinux:2023
 # 必要なパッケージのインストール
 RUN dnf update \
     && dnf install -y nginx php8.2-fpm php8.2 php8.2-pdo php8.2-mysqlnd git \
-    php8.2-zip php8.2-mbstring unzip \
+    php8.2-zip php8.2-mbstring unzip nodejs \
     && dnf clean all
 
 # DNFではsupervisorをインストールできなかったのでpip経由でインストール
